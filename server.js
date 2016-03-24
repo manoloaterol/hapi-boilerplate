@@ -6,6 +6,7 @@ var settings = require('config');
 var routes = require('./routes');
 var plugins = require('./plugins');
 var models = require('./models');
+var views = require('./views');
 
 var server = new Hapi.Server({
   connections:{
@@ -32,7 +33,11 @@ var initDb = function(cb){
       cb();
     });
   } else {
-    cb();
+    sequelize.sync()
+      .then(function () {
+        server.log('info', 'Models sync successful');
+        cb();
+      });
   }
 };
 
@@ -45,6 +50,9 @@ var setup = function(done){
 		}
 	});
 
+  // Add server views
+  server.views(views);
+
   // Add the server routes
   server.route(routes);
 
@@ -56,12 +64,13 @@ var setup = function(done){
 var start = function(){
   server.start(function(){
     server.log('info', 'Server running at: ' + server.info.uri);
+    settings.defaultUri = server.info.uri;
   });
 };
 
 // If someone runs: "node server.js" then automatically start the server
-if (path.basename(process.argv[1],'.js') == path.basename(__filename,'.js')) {
+//if (path.basename(process.argv[1],'.js') == path.basename(__filename,'.js')) {
   setup(function(){
     start();
   });
-}
+//}

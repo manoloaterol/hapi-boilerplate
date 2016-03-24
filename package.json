@@ -23,11 +23,18 @@
     "config": "^1.8.1",
     "good": "^5.1.1",
     "good-console": "^2.1.0",
+    "handlebars": "^4.0.5",
     "hapi": "^8.1.0",
+    "hapi-swagger": "^3.0.1",
+    "inert": "^3.2.0",
+    "joi": "^6.9.0",
+    "lodash": "^3.10.1",
+    "path": "^0.12.7",
     "pg": "^3.6.3",
     "pg-hstore": "^2.3.1",
     "require-directory": "^2.0.0",
-    "sequelize": "^2.0.0-rc7"
+    "sequelize": "^2.0.0-rc7",
+    "vision": "^3.0.0"
   },
   "devDependencies": {
     "lab": "^4.7.0",
