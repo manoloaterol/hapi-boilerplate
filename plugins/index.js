@@ -8,10 +8,11 @@ module.exports = [
   {
     register:require('good'),
     options:{
-      reporters: [{
-        reporter: require('good-console'),
-        args:[{ log: '*', request: '*', ops: '*', error: '*' }]
-      }]
+      reporters: {
+        myConsoleReporter: [{
+          module: 'good-console'
+        }, 'stdout']
+      }
     }
   },
   //require additional plugins here

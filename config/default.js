@@ -21,14 +21,14 @@ module.exports = {
     cors: {
       origin: ["*"],
       headers: ["Origin", "Content-Type", "Accept", "Authorization", "X-Request-With"],
-      methods: ["POST", "PUT", "GET", "OPTIONS", "DELETE"],
+      //methods: ["POST", "PUT", "GET", "OPTIONS", "DELETE"],
       credentials: true
     },
 
 
     fileSystem: {
         userHome: userHome,
-        path: userHome + "/mlmdata",
+        path: userHome + "/mydata"
     },
 
     routes: {
