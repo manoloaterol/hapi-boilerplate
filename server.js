@@ -48,13 +48,14 @@ var setup = function(done){
 		if (err) {
 			throw err; // something bad happened loading a plugin
 		}
+
+		// Add the server routes
+    server.route(routes);
 	});
 
   // Add server views
   server.views(views);
 
-  // Add the server routes
-  server.route(routes);
 
   initDb(function(){
     done();
