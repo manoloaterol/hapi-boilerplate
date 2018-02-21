@@ -4,7 +4,7 @@ var userHome = process.env.HOME || process.env.USERPROFILE;
 var configHome = __dirname,
   serverHome = configHome.replace(/[^\/]*$/g, '');
 
-var host = '192.168.3.126',
+var host = '0.0.0.0',
     port = 3007,
     externalUrl = "https://external.com";
 

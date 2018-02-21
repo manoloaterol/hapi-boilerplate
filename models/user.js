@@ -1,18 +1,21 @@
 "use strict";
 
-module.exports = function(sequelize, DataTypes) {
-  var User = sequelize.define("User", {
-    firstname: DataTypes.STRING,
-    lastname: DataTypes.STRING,
-    username: DataTypes.STRING,
-    password: DataTypes.STRING
-  }, {
-    classMethods: {
-      associate: function(models) {
-        // associations can be defined here
-      }
-    }
-  });
+var Joi = require('joi'),
+    mongoose = require('mongoose');
 
-  return User;
+
+var name = 'User';
+var schema = mongoose.Schema({
+    firstname: String,
+    lastname: String,
+    username: String,
+    password: String,
+    scope: String,
+    active: Boolean
+});
+
+
+module.exports = {
+    name: name,
+    schema: schema
 };

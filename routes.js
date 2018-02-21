@@ -1,14 +1,20 @@
-var controllers = require('./controllers');
+var controllers = require('./controllers'),
+    Joi = require("joi");
 
 module.exports = [
-  {
-    method: 'GET',
-    path: '/users',
-    config: {
-      handler: controllers.users.get,
-      tags: ['api'],
-      description: 'get all users',
-      auth: false
+    {
+        method: 'POST',
+        path: '/user/login',
+        config: {
+            handler: controllers.Users.login,
+            tags: ['api'],
+            description: 'User Login',
+            validate: {
+                payload: {
+                    username: Joi.string().required().description("Username"),
+                    password: Joi.string().required().min(4).description("Password")
+                }
+            }
+        }
     }
-  }
 ];

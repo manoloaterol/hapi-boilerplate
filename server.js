@@ -9,69 +9,66 @@ var models = require('./models');
 var views = require('./views');
 
 var server = new Hapi.Server({
-  connections:{
-    routes:{
-      cors:settings.cors
+    connections: {
+        routes: {
+            cors: settings.cors
+        }
     }
-  }
 });
-server.connection({port:settings.port, host:settings.host});
+server.connection({port: settings.port, host: settings.host});
 
 // Export the server to be required elsewhere.
 module.exports = server;
 
-var initDb = function(cb){
-  var sequelize = models.sequelize;
+var initDb = function (cb) {
+    if (settings.database.active) {
+        mongoose.connect(settings.database.host);
 
-  //Test if we're in a sqlite memory database. we may need to run migrations.
-  if(sequelize.getDialect()==='sqlite' &&
-      (!sequelize.options.storage || sequelize.options.storage === ':memory:')){
-    sequelize.getMigrator({
-      path: process.cwd() + '/migrations',
-    }).migrate().success(function(){
-      // The migrations have been executed!
-      cb();
-    });
-  } else {
-    sequelize.sync()
-      .then(function () {
-        server.log('info', 'Models sync successful');
+        var db = mongoose.connection;
+        db.on('error', function (err) {
+            console.log("Error accessing DB");
+            console.log(err);
+        });
+        db.once('open', function () {
+            // we're connected!
+            console.log("DB Connection success");
+            models = require('./models'); // Initialize models
+            cb();
+        });
+    } else {
         cb();
-      });
-  }
+    }
+
 };
 
-var setup = function(done){
+var setup = function (done) {
 
-	//Register all plugins
-	server.register(plugins, function (err) {
-		if (err) {
-			throw err; // something bad happened loading a plugin
-		}
+    //Register all plugins
+    server.register(plugins, function (err) {
+        if (err) {
+            throw err; // something bad happened loading a plugin
+        }
 
-		// Add the server routes
-    server.route(routes);
-	});
+        // Add the server routes
+        server.route(routes);
+    });
 
-  // Add server views
-  server.views(views);
+    // Add server views
+    server.views(views);
 
 
-  initDb(function(){
-    done();
-  });
+    initDb(function () {
+        done();
+    });
 };
 
-var start = function(){
-  server.start(function(){
-    server.log('info', 'Server running at: ' + server.info.uri);
-    settings.defaultUri = server.info.uri;
-  });
+var start = function () {
+    server.start(function () {
+        server.log('info', 'Server running at: ' + server.info.uri);
+        settings.defaultUri = server.info.uri;
+    });
 };
 
-// If someone runs: "node server.js" then automatically start the server
-//if (path.basename(process.argv[1],'.js') == path.basename(__filename,'.js')) {
-  setup(function(){
+setup(function () {
     start();
-  });
-//}
+});
